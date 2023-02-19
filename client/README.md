@@ -1,7 +1,7 @@
 # Let's talk
 
-- Start project : `yarn start`
+- Start project : `npm run dev`
 
-- Build project : `yarn build`
+- Build project : `npm build`
 
 - Add android gradle folder : `npx cap add android`
