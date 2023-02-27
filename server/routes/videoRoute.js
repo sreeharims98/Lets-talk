@@ -10,7 +10,6 @@ import {
   putVideo,
 } from "../controllers/videoController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
-import { isAdminMiddleware } from "../middleware/isAdminMiddleware.js";
 import { uploadFile } from "../middleware/UploadFileMiddleWare.js";
 
 const router = express.Router();
@@ -20,18 +19,18 @@ router.get("/:id", authMiddleware, getVideoById);
 router.post(
   "/",
   authMiddleware,
-  isAdminMiddleware,
+  // isAdminMiddleware,
   uploadFile.single("file"),
   postVideo
 );
 router.put(
   "/:id",
   authMiddleware,
-  isAdminMiddleware,
+  // isAdminMiddleware,
   uploadFile.single("file"),
   putVideo
 );
-router.delete("/:id", authMiddleware, isAdminMiddleware, delVideo);
+router.delete("/:id", authMiddleware, delVideo);
 router.post("/like/:id", authMiddleware, likeVideo);
 router.post("/dislike/:id", authMiddleware, dislikeVideo);
 router.post("/reaction/:id", authMiddleware, checkUserReactionToVideo);

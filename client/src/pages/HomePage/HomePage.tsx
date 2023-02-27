@@ -6,8 +6,8 @@ import { login } from "../../store/features/auth/authSlice";
 import { ROUTE_PATHS } from "../../data/constants";
 import { useForm } from "react-hook-form";
 import { clsx } from "clsx";
-import { formValues } from "./HomePage.types";
 import { validation } from "./HomePage.validation";
+import { loginData } from "../../store/features/auth/auth.types";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -17,30 +17,18 @@ const HomePage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<formValues>();
+  } = useForm<loginData>();
 
   const [isRegister, setIsRegister] = useState(false);
 
-  const onSubmit = (data: formValues) => {
+  const onSubmit = (data: loginData) => {
     console.log(data);
-    dispatch(
-      login({
-        uid: "",
-        name: "",
-        email: "",
-        image: "",
-      })
-    );
+    dispatch(login(data));
     navigate(ROUTE_PATHS.USERS);
   };
 
-  console.log(errors.password);
-
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col justify-between p-10 h-screen"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between p-10 h-screen">
       <div className="chat chat-end">
         <div className="chat-bubble">Hey</div>
       </div>
@@ -51,45 +39,44 @@ const HomePage = () => {
         <div className="chat-bubble text-2xl font-bold">Let's talk</div>
       </div>
       <div className="chat chat-start">
-        <div className="chat-bubble font-bold">
-          {isRegister ? "Login to your account" : "Create a new account"}
-        </div>
+        <div className="chat-bubble font-bold">{isRegister ? "Login to your account" : "Create a new account"}</div>
       </div>
 
       {/* username */}
       <div className="flex flex-col gap-2 w-full">
         <input
-          className={clsx(
-            "input input-bordered w-full",
-            errors.username && "input-error"
-          )}
+          className={clsx("input input-bordered w-full", errors.username && "input-error")}
           type="text"
           placeholder="Username"
           {...register("username", validation.username)}
         />
-        {errors.username && (
-          <span className="text-xs">{errors.username?.message}</span>
-        )}
+        {errors.username && <span className="text-xs">{errors.username?.message}</span>}
+      </div>
+
+      {/* email */}
+      <div className="flex flex-col gap-2 w-full">
+        <input
+          className={clsx("input input-bordered w-full", errors.email && "input-error")}
+          type="email"
+          placeholder="Email"
+          {...register("email", validation.email)}
+        />
+        {errors.email && <span className="text-xs">{errors.email?.message}</span>}
       </div>
 
       {/* password */}
       <div className="flex flex-col gap-2 w-full">
         <input
-          className={clsx(
-            "input input-bordered w-full",
-            errors.password && "input-error"
-          )}
+          className={clsx("input input-bordered w-full", errors.password && "input-error")}
           type="password"
           placeholder="Password"
           {...register("password", validation.password)}
         />
-        {errors.password && (
-          <span className="text-xs">{errors.password?.message}</span>
-        )}
+        {errors.password && <span className="text-xs">{errors.password?.message}</span>}
       </div>
 
       {/* submit button */}
-      <button className="btn btn-primary" onClick={() => {}} type="submit">
+      <button className="btn btn-primary" type="submit">
         {isRegister ? "REGISTER" : "LOGIN"}
       </button>
 

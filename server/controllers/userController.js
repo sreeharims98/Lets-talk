@@ -19,7 +19,6 @@ export const getUserByToken = async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      is_admin: user.is_admin,
     };
 
     res.json(userNew);
@@ -44,7 +43,6 @@ export const loginUser = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        is_admin: user.is_admin,
         token: generateToken(user._id),
       };
       res.json(userNew);
@@ -59,7 +57,7 @@ export const loginUser = async (req, res) => {
 
 export const postUser = async (req, res) => {
   try {
-    const { name, email, password, is_admin } = req.body;
+    const { name, email, password } = req.body;
 
     //check all fields
     if (!name || !email || !password) {
@@ -80,7 +78,6 @@ export const postUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      is_admin,
     });
 
     if (user) {
@@ -88,7 +85,6 @@ export const postUser = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        is_admin: user.is_admin,
         token: generateToken(user._id),
       };
       res.status(201).json(userNew);

@@ -4,10 +4,10 @@ import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import cors from "cors";
 import { videoRoute } from "./routes/videoRoute.js";
 import { userRoute } from "./routes/userRoute.js";
-import { config } from "./config/index.js";
+import { config } from "./config/config.js";
 
 const app = express();
-// connectDB();
+connectDB();
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));

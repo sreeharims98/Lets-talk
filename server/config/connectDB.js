@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
-import { config } from "./index.js";
+import { config } from "./config.js";
 
 export const connectDB = () => {
+  mongoose.set("strictQuery", false);
+
   mongoose
-    .connect(config.MONGODB_URL, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-    })
+    .connect(config.MONGODB_URL)
     .then((conn) => {
       console.log(`MongoDB Connected: ${conn.connection.host}`);
     })
