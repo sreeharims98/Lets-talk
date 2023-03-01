@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { logout } from "../../store/features/auth/authSlice";
+import { logout } from "../../store/auth/authSlice";
 import { DrawerProps } from "./Drawer.types";
 
 const Drawer = ({ children }: DrawerProps) => {

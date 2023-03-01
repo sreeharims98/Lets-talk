@@ -1,11 +1,12 @@
 import { AxiosResponse, InternalAxiosRequestConfig } from "axios";
-import { userState } from "../store/features/auth/auth.types";
-import { storage } from "../utils/storage-utils";
+import { STORAGE_KEYS } from "../../data/constants";
+import { userState } from "../../store/auth/auth.types";
+import { storage } from "../../utils/storage-utils";
 
 //request handler
-const requestHandler = (config: InternalAxiosRequestConfig<any>) => {
+const requestHandler = async (config: InternalAxiosRequestConfig<any>) => {
   try {
-    const user = storage.getItem("user") as userState;
+    const user = storage.getItem(STORAGE_KEYS.AUTH) as userState;
     if (user) {
       config.headers.Authorization = `Bearer ${user.token}`;
     }
@@ -16,17 +17,17 @@ const requestHandler = (config: InternalAxiosRequestConfig<any>) => {
 };
 
 //request error handler
-const requestErrorHandler = (error: any) => {
+const requestErrorHandler = async (error: any) => {
   return Promise.reject({ ...error });
 };
 
 //response handler
-const responseHandler = (response: AxiosResponse<any, any>) => {
+const responseHandler = async (response: AxiosResponse<any, any>) => {
   return response;
 };
 
 //response error handler
-const responseErrorHandler = (error: any) => {
+const responseErrorHandler = async (error: any) => {
   return Promise.reject({ ...error });
 };
 

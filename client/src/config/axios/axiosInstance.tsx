@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_URL } from "../config";
+import { BASE_URL } from "../";
 import { interceptors } from "./interceptors";
 
 const defaultOptions = {
@@ -13,15 +13,13 @@ const defaultOptions = {
 let axiosInstance = axios.create(defaultOptions);
 
 axiosInstance.interceptors.request.use(
-  (config) => interceptors.requestHandler(config),
-  (error) => interceptors.requestErrorHandler(error)
+  async (config) => interceptors.requestHandler(config),
+  async (error) => interceptors.requestErrorHandler(error)
 );
 
 axiosInstance.interceptors.response.use(
-  (response) => interceptors.responseHandler(response),
-  (error) => interceptors.responseErrorHandler(error)
+  async (response) => interceptors.responseHandler(response),
+  async (error) => interceptors.responseErrorHandler(error)
 );
-
-console.log(axiosInstance);
 
 export default axiosInstance;

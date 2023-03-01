@@ -17,7 +17,7 @@ export const getUserByToken = async (req, res) => {
 
     const userNew = {
       _id: user._id,
-      name: user.name,
+      username: user.username,
       email: user.email,
     };
 
@@ -41,7 +41,7 @@ export const loginUser = async (req, res) => {
     if (user && (await bcrypt.compare(password, user.password))) {
       const userNew = {
         _id: user._id,
-        name: user.name,
+        username: user.username,
         email: user.email,
         token: generateToken(user._id),
       };
@@ -57,10 +57,10 @@ export const loginUser = async (req, res) => {
 
 export const postUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { username, email, password } = req.body;
 
     //check all fields
-    if (!name || !email || !password) {
+    if (!username || !email || !password) {
       res.status(400);
       throw new Error("Please add all fields");
     }
@@ -75,7 +75,7 @@ export const postUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = await userModel.create({
-      name,
+      username,
       email,
       password: hashedPassword,
     });
@@ -83,7 +83,7 @@ export const postUser = async (req, res) => {
     if (user) {
       const userNew = {
         _id: user._id,
-        name: user.name,
+        username: user.username,
         email: user.email,
         token: generateToken(user._id),
       };
@@ -100,7 +100,7 @@ export const postUser = async (req, res) => {
 export const putUser = async (req, res) => {
   try {
     const user = await userModel.findById(req.params.id);
-    user.name = req.body.name;
+    user.username = req.body.username;
     await user.save();
     res.json({ message: "User updated" });
   } catch (error) {
