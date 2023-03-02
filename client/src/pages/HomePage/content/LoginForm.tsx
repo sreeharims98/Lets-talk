@@ -1,7 +1,6 @@
 import { clsx } from "clsx";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import Alert from "../../../components/Alert/Alert";
 import { AppDispatch, RootState } from "../../../store";
 import { loginData } from "../../../store/auth/auth.types";
 import { login } from "../../../store/auth/authSlice";
@@ -24,7 +23,6 @@ const LoginForm = ({ setIsRegister }: formType) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between p-6 h-screen">
-      {/* {error && <Alert msg={error} />} */}
       <div className="chat chat-end">
         <div className="chat-bubble">Hey</div>
       </div>
