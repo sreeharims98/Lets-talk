@@ -4,8 +4,10 @@ import { generateToken } from "../common/generateToken.js";
 
 export const getAllUsers = async (req, res) => {
   try {
-    const allProjects = await userModel.find();
-    res.json(allProjects);
+    // exclude: requesting user, all password field
+    const allUsers = await userModel.find({ _id: { $ne: req.user.id } }, { password: 0 });
+
+    res.json(allUsers);
   } catch (error) {
     res.status(400).json({ message: "Users not found !" });
   }
@@ -13,15 +15,9 @@ export const getAllUsers = async (req, res) => {
 
 export const getUserByToken = async (req, res) => {
   try {
-    const user = await userModel.findById(req.user.id);
+    const user = await userModel.findById(req.user.id, { password: 0 });
 
-    const userNew = {
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-    };
-
-    res.json(userNew);
+    res.json(user);
   } catch (error) {
     res.status(400).json({ message: "User not found !" });
   }

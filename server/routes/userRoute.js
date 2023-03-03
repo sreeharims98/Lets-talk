@@ -1,18 +1,11 @@
 import express from "express";
-import {
-  deleteUser,
-  getAllUsers,
-  getUserByToken,
-  loginUser,
-  postUser,
-  putUser,
-} from "../controllers/userController.js";
+import { deleteUser, getAllUsers, getUserByToken, loginUser, postUser, putUser } from "../controllers/userController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { userValidate, userValidator } from "../middleware/validator.js";
 
 const router = express.Router();
 
-router.get("/", getAllUsers);
+router.get("/", authMiddleware, getAllUsers);
 router.post("/", userValidator(), userValidate, postUser);
 router.post("/login", loginUser);
 router.get("/get", authMiddleware, getUserByToken);
