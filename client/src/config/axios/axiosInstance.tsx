@@ -1,9 +1,9 @@
 import axios from "axios";
-import { BASE_URL } from "../";
+import { BASE_URL_API } from "../";
 import { interceptors } from "./interceptors";
 
 const defaultOptions = {
-  baseURL: BASE_URL,
+  baseURL: BASE_URL_API,
   headers: {
     "Content-Type": "application/json",
   },

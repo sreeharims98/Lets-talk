@@ -5,6 +5,14 @@ export type userState = {
   token: string;
 };
 
+export type userSocketState = {
+  sid: string;
+  _id: string;
+  username: string;
+  email: string;
+  token: string;
+};
+
 export type userSliceState = {
   users: userState[];
   loading: boolean;

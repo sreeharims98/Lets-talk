@@ -15,13 +15,7 @@ const ChatPage = () => {
     <div className="">
       <Drawer>
         <>
-          <Header
-            hasBack
-            name={"Sreehari M S"}
-            email={"iamsreeharims"}
-            avatar={"S"}
-            handleUserClick={handleUserHeaderClick}
-          />
+          <Header hasBack name={"Sreehari M S"} email={"iamsreeharims"} avatar={"S"} handleUserClick={handleUserHeaderClick} />
           <ChatList />
           <ChatInput />
         </>
