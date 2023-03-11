@@ -16,7 +16,7 @@ export const Routes = () => {
     },
     {
       path: ROUTE_PATHS.HOME,
-      element: <HomeContainer />,
+      element: <ProtectedRoute component={<HomeContainer />} />,
       errorElement: <ErrorPage />,
       children: [
         {
