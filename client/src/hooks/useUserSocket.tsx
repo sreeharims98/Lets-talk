@@ -6,23 +6,41 @@ import { SOCKET } from "../data/constants";
 import { RootState } from "../store";
 import { userSocketState } from "../store/users/users.types";
 
-const socket = io(BASE_URL);
-const useSocket = () => {
+const useUserSocket = () => {
+  let socket: any;
   const { user } = useSelector((state: RootState) => state.auth);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<null | string>(null);
 
   const [isConnected, setIsConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<userSocketState[]>([]);
 
+  const socketDisconnect = () => {
+    if (user && socket) {
+      console.log("disconnect");
+      socket.disconnect();
+    }
+  };
+
   useEffect(() => {
-    if (socket && !isConnected) {
+    setLoading(true);
+    setError("");
+
+    socket = io(BASE_URL);
+
+    if (socket && !isConnected && user) {
+      console.log("SOCKET CALLED");
+
       //socket connect
       socket.on(SOCKET.CONNECT, () => {
+        console.log("connect");
         setIsConnected(true);
         socket.emit(SOCKET.STATUS_CLIENT_ONLINE, user);
       });
 
       //socket message
-      socket.on(SOCKET.MESSAGE, (message) => {
+      socket.on(SOCKET.MESSAGE, (message: any) => {
         console.log(SOCKET.MESSAGE, message);
       });
 
@@ -32,12 +50,14 @@ const useSocket = () => {
           const otherUsers = OUsers.filter((O) => O._id !== user._id);
           setOnlineUsers(otherUsers);
           console.log(SOCKET.STATUS_SERVER, otherUsers);
+          setLoading(false);
         }
       });
 
       //socket disconnect
       socket.on(SOCKET.DISCONNECT, () => {
         setIsConnected(false);
+        setError("Server disconnected!");
       });
     }
 
@@ -45,9 +65,9 @@ const useSocket = () => {
       socket.off(SOCKET.CONNECT);
       socket.off(SOCKET.DISCONNECT);
     };
-  }, []);
+  }, [user]);
 
-  return { socket, isConnected, onlineUsers };
+  return { socket, error, loading, isConnected, socketDisconnect, onlineUsers };
 };
 
-export default useSocket;
+export default useUserSocket;

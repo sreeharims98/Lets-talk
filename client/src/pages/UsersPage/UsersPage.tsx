@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Alert from "../../components/Alert/Alert";
@@ -6,19 +6,20 @@ import Drawer from "../../components/Drawer/Drawer";
 import Header from "../../components/Header/Header";
 import Spinner from "../../components/Spinner/Spinner";
 import UserList from "../../components/UserList/UserList";
-import { ROUTE_PATHS } from "../../data/constants";
-import useSocket from "../../hooks/useSocket";
+import { ROUTE_PATHS, SOCKET } from "../../data/constants";
+import useUserSocket from "../../hooks/useUserSocket";
 import { AppDispatch, RootState } from "../../store";
 import { getAllUsers } from "../../store/users/usersSlice";
-import { userSocketState } from "../../store/users/users.types";
+import Message from "../../components/Message/Message";
 
 const UsersPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { isConnected, onlineUsers } = useSocket();
+
+  const { socket, error, isConnected, loading, socketDisconnect, onlineUsers } = useUserSocket();
 
   const { user } = useSelector((state: RootState) => state.auth);
-  const { users, error, loading } = useSelector((state: RootState) => state.users);
+  // const { users, error, loading } = useSelector((state: RootState) => state.users);
 
   const handleUserClick = () => {
     navigate(ROUTE_PATHS.CHAT);
@@ -29,7 +30,10 @@ const UsersPage = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllUsers(""));
+    // dispatch(getAllUsers(""));
+    return () => {
+      socketDisconnect();
+    };
   }, []);
 
   let content;
@@ -41,6 +45,8 @@ const UsersPage = () => {
     content = onlineUsers.map((u) => (
       <UserList key={u.email} avatar={u.username[0]} email={u.email} name={u.username} handleClick={handleUserClick} />
     ));
+  } else {
+    content = <Message text="No users were discovered online 😥" />;
   }
 
   if (!user) return null;
