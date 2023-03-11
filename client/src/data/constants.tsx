@@ -1,7 +1,8 @@
 export const ROUTE_PATHS = {
-  HOME: "/",
-  USERS: "/users",
-  CHAT: "/chat",
+  AUTH: "/",
+  HOME: "/home",
+  USERS: "/home/users",
+  CHAT: "/home/chat",
 };
 
 export const STORAGE_KEYS = {

@@ -4,10 +4,8 @@ import { Navigate, useNavigate } from "react-router-dom";
 import Alert from "../../components/Alert/Alert";
 import Drawer from "../../components/Drawer/Drawer";
 import Header from "../../components/Header/Header";
-import Spinner from "../../components/Spinner/Spinner";
 import UserList from "../../components/UserList/UserList";
 import { ROUTE_PATHS } from "../../data/constants";
-import useUserSocket from "../../hooks/useUserSocket";
 import { AppDispatch, RootState } from "../../store";
 import Message from "../../components/Message/Message";
 import { setSelectedUser } from "../../store/chat/chatSlice";
@@ -17,9 +15,8 @@ const UsersPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { error, loading, socketDisconnect, onlineUsers } = useUserSocket();
-
   const { user } = useSelector((state: RootState) => state.auth);
+  const { onlineUsers } = useSelector((state: RootState) => state.users);
 
   const handleUserClick = (user: userState) => {
     dispatch(setSelectedUser(user));
@@ -30,24 +27,14 @@ const UsersPage = () => {
     navigate(-1);
   };
 
-  useEffect(() => {
-    return () => {
-      socketDisconnect();
-    };
-  }, []);
-
   let content;
-  if (loading) {
-    content = <Spinner isFull={false} />;
-  } else if (error) {
-    content = <Alert msg={error} type="error" />;
-  } else if (onlineUsers.length) {
+  if (onlineUsers.length) {
     content = onlineUsers.map((u) => <UserList key={u.email} user={u} handleClick={handleUserClick} />);
   } else {
     content = <Message text="No users were discovered online 😥" />;
   }
 
-  if (!user) return <Navigate to={ROUTE_PATHS.HOME} />;
+  if (!user) return <Navigate to={ROUTE_PATHS.AUTH} />;
   return (
     <div className="">
       <Drawer>

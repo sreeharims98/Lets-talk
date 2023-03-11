@@ -1,24 +1,26 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import io from "socket.io-client";
+import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../config";
 import { SOCKET } from "../data/constants";
-import { RootState } from "../store";
+import { AppDispatch, RootState } from "../store";
 import { userSocketState } from "../store/users/users.types";
+import { setOnlineUsers } from "../store/users/usersSlice";
+import io from "socket.io-client";
 
 const useUserSocket = () => {
   let socket: any;
+  const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 
   const [isConnected, setIsConnected] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState<userSocketState[]>([]);
+  // const [onlineUsers, setOnlineUsers] = useState<userSocketState[]>([]);
 
   const socketDisconnect = () => {
     if (user && socket) {
-      console.log("disconnect");
+      console.log("SOCKET DISCONNECTED");
       socket.disconnect();
     }
   };
@@ -28,46 +30,46 @@ const useUserSocket = () => {
     setError("");
 
     socket = io(BASE_URL);
+    console.log("SOCKET INITIALIZED");
 
     if (socket && !isConnected && user) {
-      console.log("SOCKET CALLED");
-
       //socket connect
       socket.on(SOCKET.CONNECT, () => {
-        console.log("connect");
+        console.log("SOCKET CONNECTED");
         setIsConnected(true);
         socket.emit(SOCKET.STATUS_CLIENT_ONLINE, user);
+        setLoading(false);
       });
 
       //socket message
       socket.on(SOCKET.MESSAGE, (message: any) => {
-        console.log(SOCKET.MESSAGE, message);
+        console.log("SOCKET MESSAGE RECIEVED", message);
       });
 
       //socket message
       socket.on(SOCKET.STATUS_SERVER, (OUsers: userSocketState[]) => {
         if (user) {
+          console.log("SOCKET SERVER STATUS RECIEVED", OUsers);
           const otherUsers = OUsers.filter((O) => O._id !== user._id);
-          setOnlineUsers(otherUsers);
-          console.log(SOCKET.STATUS_SERVER, otherUsers);
-          setLoading(false);
+          dispatch(setOnlineUsers(otherUsers));
         }
       });
 
       //socket disconnect
       socket.on(SOCKET.DISCONNECT, () => {
+        console.log("SOCKET SERVER DISCONNECTED");
         setIsConnected(false);
-        setError("Server disconnected!");
       });
     }
 
     return () => {
+      console.log("SOCKET OFF");
       socket.off(SOCKET.CONNECT);
       socket.off(SOCKET.DISCONNECT);
     };
   }, [user]);
 
-  return { socket, error, loading, isConnected, socketDisconnect, onlineUsers };
+  return { socket, error, loading, isConnected, socketDisconnect };
 };
 
 export default useUserSocket;

@@ -4,12 +4,12 @@ import RegisterForm from "./content/RegisterForm";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATHS } from "../../data/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { AppDispatch, RootState } from "../../store";
 import { setError } from "../../store/auth/authSlice";
 
-const HomePage = () => {
+const AuthPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { user, error } = useSelector((state: RootState) => state.auth);
   const [isRegister, setIsRegister] = useState(false);
@@ -18,7 +18,7 @@ const HomePage = () => {
     if (user) {
       navigate(ROUTE_PATHS.USERS);
     } else {
-      navigate(ROUTE_PATHS.HOME);
+      navigate(ROUTE_PATHS.AUTH);
     }
   }, [user]);
 
@@ -38,4 +38,4 @@ const HomePage = () => {
   return <>{isRegister ? <RegisterForm setIsRegister={setIsRegister} /> : <LoginForm setIsRegister={setIsRegister} />}</>;
 };
 
-export default HomePage;
+export default AuthPage;

@@ -1,9 +1,10 @@
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store";
 import { logout } from "../../store/auth/authSlice";
 import { DrawerProps } from "./Drawer.types";
 
 const Drawer = ({ children }: DrawerProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleLogout = async () => {
     dispatch(logout());

@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { userSliceState, userState } from "./users.types";
+import { userSliceState } from "./users.types";
 import usersService from "../../services/usersServices";
+import { userState } from "../auth/auth.types";
 
 const initialState: userSliceState = {
   users: [],
+  onlineUsers: [],
   loading: false,
   error: null,
 };
@@ -26,6 +28,9 @@ export const usersSlice = createSlice({
   reducers: {
     setUsers: (state, action) => {
       state.users = action.payload;
+    },
+    setOnlineUsers: (state, action) => {
+      state.onlineUsers = action.payload;
     },
     setError: (state) => {
       state.error = null;
@@ -50,7 +55,7 @@ export const usersSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setError } = usersSlice.actions;
+export const { setError, setOnlineUsers, setUsers } = usersSlice.actions;
 // Define your selector
 // export const selectAuth = (state: userSliceState) => state;
 // export const authUser = createSelector(selectAuth, (state) => state.user);

@@ -11,10 +11,6 @@ type Props = {
 const ProtectedRoute = (props: Props) => {
   const { user } = useSelector((state: RootState) => state.auth);
 
-  return (
-    <React.Fragment>
-      {user ? props.component : <Navigate to={ROUTE_PATHS.HOME} />}
-    </React.Fragment>
-  );
+  return <React.Fragment>{user ? props.component : <Navigate to={ROUTE_PATHS.AUTH} />}</React.Fragment>;
 };
 export default ProtectedRoute;

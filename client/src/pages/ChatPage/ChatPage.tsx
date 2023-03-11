@@ -17,7 +17,7 @@ const ChatPage = () => {
 
   const { selectedUser } = useSelector((state: RootState) => state.chat);
 
-  if (!selectedUser) return <Navigate to={ROUTE_PATHS.HOME} />;
+  if (!selectedUser) return <Navigate to={ROUTE_PATHS.AUTH} />;
   return (
     <div className="">
       <Drawer>
