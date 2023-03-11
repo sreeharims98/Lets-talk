@@ -1,7 +1,7 @@
+import { userState } from "../../store/auth/auth.types";
+
 export type HeaderProps = {
   hasBack: boolean;
-  name: string;
-  email: string;
-  avatar: string;
+  user: userState;
   handleUserClick: () => void;
 };

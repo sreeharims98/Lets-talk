@@ -1,27 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import Alert from "../../components/Alert/Alert";
 import Drawer from "../../components/Drawer/Drawer";
 import Header from "../../components/Header/Header";
 import Spinner from "../../components/Spinner/Spinner";
 import UserList from "../../components/UserList/UserList";
-import { ROUTE_PATHS, SOCKET } from "../../data/constants";
+import { ROUTE_PATHS } from "../../data/constants";
 import useUserSocket from "../../hooks/useUserSocket";
 import { AppDispatch, RootState } from "../../store";
-import { getAllUsers } from "../../store/users/usersSlice";
 import Message from "../../components/Message/Message";
+import { setSelectedUser } from "../../store/chat/chatSlice";
+import { userState } from "../../store/auth/auth.types";
 
 const UsersPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { socket, error, isConnected, loading, socketDisconnect, onlineUsers } = useUserSocket();
+  const { error, loading, socketDisconnect, onlineUsers } = useUserSocket();
 
   const { user } = useSelector((state: RootState) => state.auth);
-  // const { users, error, loading } = useSelector((state: RootState) => state.users);
 
-  const handleUserClick = () => {
+  const handleUserClick = (user: userState) => {
+    dispatch(setSelectedUser(user));
     navigate(ROUTE_PATHS.CHAT);
   };
 
@@ -30,7 +31,6 @@ const UsersPage = () => {
   };
 
   useEffect(() => {
-    // dispatch(getAllUsers(""));
     return () => {
       socketDisconnect();
     };
@@ -42,25 +42,17 @@ const UsersPage = () => {
   } else if (error) {
     content = <Alert msg={error} type="error" />;
   } else if (onlineUsers.length) {
-    content = onlineUsers.map((u) => (
-      <UserList key={u.email} avatar={u.username[0]} email={u.email} name={u.username} handleClick={handleUserClick} />
-    ));
+    content = onlineUsers.map((u) => <UserList key={u.email} user={u} handleClick={handleUserClick} />);
   } else {
     content = <Message text="No users were discovered online 😥" />;
   }
 
-  if (!user) return null;
+  if (!user) return <Navigate to={ROUTE_PATHS.HOME} />;
   return (
     <div className="">
       <Drawer>
         <>
-          <Header
-            hasBack={false}
-            name={user.username}
-            email={user.email}
-            avatar={user.username[0]}
-            handleUserClick={handleUserHeaderClick}
-          />
+          <Header hasBack={false} user={user} handleUserClick={handleUserHeaderClick} />
           <div className="p-2 z-1 z-0 h-[calc(100vh-6rem)] overflow-y-scroll overflow-x-hidden py-2">{content}</div>
         </>
       </Drawer>

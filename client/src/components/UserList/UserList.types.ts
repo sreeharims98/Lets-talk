@@ -1,7 +1,7 @@
+import { userState } from "../../store/auth/auth.types";
+
 export type UserListProps = {
-  name: string;
-  email: string;
-  avatar: string;
+  user: userState;
   isHoverable?: boolean;
-  handleClick: () => void;
+  handleClick: (user: userState) => void;
 };
