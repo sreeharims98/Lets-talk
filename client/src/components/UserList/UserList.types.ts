@@ -1,4 +1,4 @@
-import { userState } from "../../store/auth/auth.types";
+import { userState } from "../../types/common.types";
 
 export type UserListProps = {
   user: userState;

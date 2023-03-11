@@ -3,18 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../config";
 import { SOCKET } from "../data/constants";
 import { AppDispatch, RootState } from "../store";
-import { userSocketState } from "../store/users/users.types";
 import { setOnlineUsers } from "../store/users/usersSlice";
 import io from "socket.io-client";
 import { handleCommonError } from "../utils/common-utils";
+import { userSocketState } from "../types/common.types";
 
-const useUserSocket = () => {
+const useSocket = () => {
   let socket: any;
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
 
   const [loading, setLoading] = useState(true);
-
   const [isConnected, setIsConnected] = useState(false);
   // const [onlineUsers, setOnlineUsers] = useState<userSocketState[]>([]);
 
@@ -37,7 +36,8 @@ const useUserSocket = () => {
       socket.on(SOCKET.CONNECT, () => {
         console.log("SOCKET CONNECTED");
         setIsConnected(true);
-        socket.emit(SOCKET.STATUS_CLIENT_ONLINE, user);
+        const { token, ...remUser } = user;
+        socket.emit(SOCKET.STATUS_CLIENT_ONLINE, remUser);
         setLoading(false);
       });
 
@@ -72,4 +72,4 @@ const useUserSocket = () => {
   return { socket, loading, isConnected, socketDisconnect };
 };
 
-export default useUserSocket;
+export default useSocket;

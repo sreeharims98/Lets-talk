@@ -1,9 +1,4 @@
-export type userState = {
-  _id: string;
-  username: string;
-  email: string;
-  token: string;
-};
+import { userState } from "../../types/common.types";
 
 export type AuthSliceState = {
   user: userState | null;

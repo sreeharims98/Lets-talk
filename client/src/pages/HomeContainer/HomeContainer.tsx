@@ -4,10 +4,10 @@ import { Navigate, Outlet } from "react-router-dom";
 import Alert from "../../components/Alert/Alert";
 import Spinner from "../../components/Spinner/Spinner";
 import { ROUTE_PATHS } from "../../data/constants";
-import useUserSocket from "../../hooks/useUserSocket";
+import useSocket from "../../hooks/useSocket";
 import { RootState } from "../../store";
 const HomeContainer = () => {
-  const { loading, socketDisconnect } = useUserSocket();
+  const { loading, socketDisconnect } = useSocket();
 
   const { user } = useSelector((state: RootState) => state.auth);
   const { error } = useSelector((state: RootState) => state.common);

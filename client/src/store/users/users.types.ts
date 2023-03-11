@@ -1,12 +1,4 @@
-import { userState } from "../auth/auth.types";
-
-export type userSocketState = {
-  sid: string;
-  _id: string;
-  username: string;
-  email: string;
-  token: string;
-};
+import { userState } from "../../types/common.types";
 
 export type userSliceState = {
   users: userState[];

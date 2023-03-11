@@ -1,6 +1,6 @@
 import { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { STORAGE_KEYS } from "../../data/constants";
-import { userState } from "../../store/auth/auth.types";
+import { userState } from "../../types/common.types";
 import { storage } from "../../utils/storage-utils";
 
 //request handler

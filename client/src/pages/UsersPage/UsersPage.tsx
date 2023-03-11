@@ -1,7 +1,5 @@
-import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
-import Alert from "../../components/Alert/Alert";
 import Drawer from "../../components/Drawer/Drawer";
 import Header from "../../components/Header/Header";
 import UserList from "../../components/UserList/UserList";
@@ -9,7 +7,7 @@ import { ROUTE_PATHS } from "../../data/constants";
 import { AppDispatch, RootState } from "../../store";
 import Message from "../../components/Message/Message";
 import { setSelectedUser } from "../../store/chat/chatSlice";
-import { userState } from "../../store/auth/auth.types";
+import { userState } from "../../types/common.types";
 
 const UsersPage = () => {
   const navigate = useNavigate();
@@ -24,7 +22,7 @@ const UsersPage = () => {
   };
 
   const handleUserHeaderClick = () => {
-    navigate(-1);
+    // navigate(-1);
   };
 
   let content;

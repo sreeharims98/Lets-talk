@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit";
-import { AuthSliceState, loginData, registerData, userState } from "./auth.types";
+import { AuthSliceState, loginData, registerData } from "./auth.types";
 import { storage } from "../../utils/storage-utils";
 import authService from "../../services/authServices";
 import { STORAGE_KEYS } from "../../data/constants";
+import { userState } from "../../types/common.types";
 
 const user = storage.getItem(STORAGE_KEYS.AUTH);
 
