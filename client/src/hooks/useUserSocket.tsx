@@ -6,6 +6,7 @@ import { AppDispatch, RootState } from "../store";
 import { userSocketState } from "../store/users/users.types";
 import { setOnlineUsers } from "../store/users/usersSlice";
 import io from "socket.io-client";
+import { handleCommonError } from "../utils/common-utils";
 
 const useUserSocket = () => {
   let socket: any;
@@ -13,7 +14,6 @@ const useUserSocket = () => {
   const { user } = useSelector((state: RootState) => state.auth);
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<null | string>(null);
 
   const [isConnected, setIsConnected] = useState(false);
   // const [onlineUsers, setOnlineUsers] = useState<userSocketState[]>([]);
@@ -27,7 +27,7 @@ const useUserSocket = () => {
 
   useEffect(() => {
     setLoading(true);
-    setError("");
+    handleCommonError("");
 
     socket = io(BASE_URL);
     console.log("SOCKET INITIALIZED");
@@ -69,7 +69,7 @@ const useUserSocket = () => {
     };
   }, [user]);
 
-  return { socket, error, loading, isConnected, socketDisconnect };
+  return { socket, loading, isConnected, socketDisconnect };
 };
 
 export default useUserSocket;

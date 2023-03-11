@@ -7,9 +7,10 @@ import { ROUTE_PATHS } from "../../data/constants";
 import useUserSocket from "../../hooks/useUserSocket";
 import { RootState } from "../../store";
 const HomeContainer = () => {
-  const { error, loading, socketDisconnect } = useUserSocket();
+  const { loading, socketDisconnect } = useUserSocket();
 
   const { user } = useSelector((state: RootState) => state.auth);
+  const { error } = useSelector((state: RootState) => state.common);
 
   useEffect(() => {
     return () => {
