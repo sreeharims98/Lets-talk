@@ -1,52 +1,32 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { BASE_URL } from "../config";
+import { useSelector } from "react-redux";
+import { Socket } from "socket.io-client";
 import { SOCKET } from "../data/constants";
-import { AppDispatch, RootState } from "../store";
-import { setOnlineUsers } from "../store/users/usersSlice";
-import io from "socket.io-client";
-import { handleCommonError } from "../utils/common-utils";
+import { RootState } from "../store";
 import { userSocketState } from "../types/common.types";
 
-const useOnlineSocket = () => {
-  let socket: any;
-  const dispatch = useDispatch<AppDispatch>();
+const useOnlineSocket = ({ socket }: { socket: Socket | null }) => {
   const { user } = useSelector((state: RootState) => state.auth);
 
-  const [loading, setLoading] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
-  // const [onlineUsers, setOnlineUsers] = useState<userSocketState[]>([]);
-
-  const socketDisconnect = () => {
-    if (user && socket) {
-      console.log("SOCKET DISCONNECTED");
-      socket.disconnect();
-    }
-  };
+  const [onlineUsers, setOnlineUsers] = useState<userSocketState[]>([]);
 
   useEffect(() => {
-    setLoading(true);
-    handleCommonError("");
-
-    socket = io(BASE_URL);
-    console.log("SOCKET INITIALIZED");
-
-    if (socket && !isConnected && user) {
+    if (socket && user && !isConnected) {
       //socket connect
       socket.on(SOCKET.CONNECT, () => {
-        console.log("SOCKET CONNECTED");
+        console.log("SOCKET ONLINE CONNECTED");
         setIsConnected(true);
         const { token, ...remUser } = user;
         socket.emit(SOCKET.STATUS_CLIENT_ONLINE, remUser);
-        setLoading(false);
       });
 
       //socket message
       socket.on(SOCKET.STATUS_SERVER, (OUsers: userSocketState[]) => {
         if (user) {
-          console.log("SOCKET SERVER STATUS RECIEVED", OUsers);
+          console.log("SOCKET SERVER STATUS RECIEVED");
           const otherUsers = OUsers.filter((O) => O._id !== user._id);
-          dispatch(setOnlineUsers(otherUsers));
+          setOnlineUsers(otherUsers);
         }
       });
 
@@ -56,15 +36,16 @@ const useOnlineSocket = () => {
         setIsConnected(false);
       });
     }
-
     return () => {
-      console.log("SOCKET OFF");
-      socket.off(SOCKET.CONNECT);
-      socket.off(SOCKET.DISCONNECT);
+      if (socket) {
+        console.log("SOCKET OFF");
+        socket.off(SOCKET.CONNECT);
+        socket.off(SOCKET.DISCONNECT);
+      }
     };
-  }, [user]);
+  }, []);
 
-  return { socket, loading, isConnected, socketDisconnect };
+  return { socket, onlineUsers, isConnected };
 };
 
 export default useOnlineSocket;

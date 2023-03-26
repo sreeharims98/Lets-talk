@@ -1,27 +1,16 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BASE_URL } from "../config";
 import { SOCKET } from "../data/constants";
 import { AppDispatch, RootState } from "../store";
-import io from "socket.io-client";
 import { handleCommonError } from "../utils/common-utils";
 import { socketMsg } from "../types/common.types";
+import { Socket } from "socket.io-client";
 
-const useChatSocket = () => {
-  const [socket, setSocket] = useState<any>(null);
-  // let socket: any;
-  const dispatch = useDispatch<AppDispatch>();
+const useChatSocket = ({ socket }: { socket: Socket | null }) => {
   const { user } = useSelector((state: RootState) => state.auth);
 
-  const [loading, setLoading] = useState(true);
+  const [chat, setChat] = useState<socketMsg | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-
-  const socketDisconnect = () => {
-    if (user && socket) {
-      console.log("SOCKET DISCONNECTED");
-      socket.disconnect();
-    }
-  };
 
   const socketSendMsg = (data: socketMsg) => {
     if (socket) {
@@ -31,41 +20,37 @@ const useChatSocket = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    handleCommonError("");
-
-    let skt = io(BASE_URL);
-    setSocket(io(BASE_URL));
-    console.log("SOCKET INITIALIZED");
-
-    if (skt && !isConnected && user) {
+    if (socket && user && !isConnected) {
+      handleCommonError("");
       //socket connect
-      skt.on(SOCKET.CONNECT, () => {
-        console.log("SOCKET CONNECTED");
+      socket.on(SOCKET.CONNECT, () => {
+        console.log("SOCKET CHAT CONNECTED");
         setIsConnected(true);
-        setLoading(false);
       });
 
       //socket message
-      skt.on(SOCKET.MESSAGE, (message: any) => {
+      socket.on(SOCKET.MESSAGE, (message: any) => {
         console.log("SOCKET MESSAGE RECIEVED", message);
+        setChat(message);
       });
 
       //socket disconnect
-      skt.on(SOCKET.DISCONNECT, () => {
+      socket.on(SOCKET.DISCONNECT, () => {
         console.log("SOCKET SERVER DISCONNECTED");
         setIsConnected(false);
       });
     }
 
     return () => {
-      console.log("SOCKET OFF");
-      skt.off(SOCKET.CONNECT);
-      skt.off(SOCKET.DISCONNECT);
+      if (socket) {
+        console.log("SOCKET OFF");
+        socket.off(SOCKET.CONNECT);
+        socket.off(SOCKET.DISCONNECT);
+      }
     };
-  }, [user]);
+  }, []);
 
-  return { socket, loading, isConnected, socketDisconnect, socketSendMsg };
+  return { chat, socket, isConnected, socketSendMsg };
 };
 
 export default useChatSocket;

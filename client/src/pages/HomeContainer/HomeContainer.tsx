@@ -1,46 +1,15 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Outlet, useOutletContext } from "react-router-dom";
-import { io, Socket } from "socket.io-client";
+import { useSelector } from "react-redux";
+import { Navigate, Outlet } from "react-router-dom";
 import Alert from "../../components/Alert/Alert";
 import Spinner from "../../components/Spinner/Spinner";
-import { BASE_URL } from "../../config";
-import { ROUTE_PATHS, SOCKET } from "../../data/constants";
-import { AppDispatch, RootState } from "../../store";
-import { setOnlineUsers } from "../../store/users/usersSlice";
-import { userSocketState } from "../../types/common.types";
-// import useOnlineSocket from "../../hooks/useOnlineSocket";
-
-type ContextType = {
-  socket: Socket | null;
-};
+import { socketContext } from "../../hooks/useSocket";
+import { ROUTE_PATHS } from "../../data/constants";
+import { RootState } from "../../store";
 
 export const HomeContainer = () => {
-  // const { loading, socketDisconnect, socket } = useOnlineSocket();
-  const dispatch = useDispatch<AppDispatch>();
-
   const { user } = useSelector((state: RootState) => state.auth);
   const { error } = useSelector((state: RootState) => state.common);
-
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const [loading, setLoading] = useState(true);
-  // const [isConnected, setIsConnected] = useState(false);
-  let skt: Socket;
-
-  useEffect(() => {
-    if (!skt) {
-      skt = io(BASE_URL);
-      setSocket(skt);
-      setLoading(false);
-    }
-    return () => {
-      if (skt) {
-        console.log("SOCKET OFF");
-        skt.off(SOCKET.CONNECT);
-        skt.off(SOCKET.DISCONNECT);
-      }
-    };
-  }, []);
+  const { socket, loading } = socketContext();
 
   if (loading) return <Spinner isFull={false} />;
   else if (error) return <Alert msg={error} type="error" />;
@@ -51,7 +20,3 @@ export const HomeContainer = () => {
     </div>
   );
 };
-
-export function useSocket() {
-  return useOutletContext<ContextType>();
-}
