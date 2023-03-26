@@ -8,7 +8,7 @@ import io from "socket.io-client";
 import { handleCommonError } from "../utils/common-utils";
 import { userSocketState } from "../types/common.types";
 
-const useSocket = () => {
+const useOnlineSocket = () => {
   let socket: any;
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -42,11 +42,6 @@ const useSocket = () => {
       });
 
       //socket message
-      socket.on(SOCKET.MESSAGE, (message: any) => {
-        console.log("SOCKET MESSAGE RECIEVED", message);
-      });
-
-      //socket message
       socket.on(SOCKET.STATUS_SERVER, (OUsers: userSocketState[]) => {
         if (user) {
           console.log("SOCKET SERVER STATUS RECIEVED", OUsers);
@@ -72,4 +67,4 @@ const useSocket = () => {
   return { socket, loading, isConnected, socketDisconnect };
 };
 
-export default useSocket;
+export default useOnlineSocket;

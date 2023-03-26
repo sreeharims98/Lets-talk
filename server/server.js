@@ -8,7 +8,7 @@ import { config } from "./config/config.js";
 import { Server } from "socket.io";
 import http from "http";
 import { SOCKET } from "./data/constants.js";
-import { addUserToOnline, getOnlineUsers, removeUserFromOnline } from "./utils/users.js";
+import { addUserToOnline, getReciever, removeUserFromOnline } from "./utils/users.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -44,7 +44,10 @@ io.on(SOCKET.CONNECTION, (socket) => {
   //listen for chat messages
   socket.on(SOCKET.CHAT_MESSAGE, (msg) => {
     //send to all users when a new message is recieved
-    io.emit(SOCKET.MESSAGE, msg);
+    let user = getReciever(msg?.reciever?._id);
+    if (user && user.sid) {
+      io.to(user.sid).emit(SOCKET.MESSAGE, msg);
+    }
   });
 
   //socket when disconnect

@@ -16,3 +16,9 @@ export type chatState = {
   msg: string;
 };
 export type allChatsState = chatState[];
+
+export type socketMsg = {
+  msg: string;
+  sender: userState;
+  reciever: userState;
+};

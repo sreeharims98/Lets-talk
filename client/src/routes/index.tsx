@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import UsersPage from "../pages/UsersPage/UsersPage";
 import { ROUTE_PATHS } from "../data/constants";
-import HomeContainer from "../pages/HomeContainer/HomeContainer";
+import { HomeContainer } from "../pages/HomeContainer/HomeContainer";
 
 export const Routes = () => {
   const router = createBrowserRouter([

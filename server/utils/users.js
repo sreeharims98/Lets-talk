@@ -20,3 +20,7 @@ export const removeUserFromOnline = (sid) => {
   onlineUsers = remOnlineUsers;
   return onlineUsers;
 };
+
+export const getReciever = (uid) => {
+  return onlineUsers.find((u) => u?._id === uid);
+};
