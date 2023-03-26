@@ -9,13 +9,21 @@ import { Navigate } from "react-router-dom";
 import { ROUTE_PATHS } from "../../data/constants";
 import useChatSocket from "../../hooks/useChatSocket";
 import { useSocket } from "../../context/socketContext";
+import { allChatsState, userState } from "../../types/common.types";
+
+const getChat = (chats: allChatsState[], selectedUser: userState | null) => {
+  if (selectedUser && chats.length) {
+    const data = chats.find((c) => c.user._id === selectedUser._id);
+    return data?.msgs;
+  }
+};
 
 const ChatPage = () => {
   const navigate = useNavigate();
   const { socket } = useSocket();
-  const { chat, socketSendMsg } = useChatSocket({ socket });
+  const { socketSendMsg } = useChatSocket({ socket });
 
-  const { selectedUser } = useSelector((state: RootState) => state.chat);
+  const { selectedUser, chats } = useSelector((state: RootState) => state.chat);
   const { user } = useSelector((state: RootState) => state.auth);
 
   const handleUserHeaderClick = () => {
@@ -23,7 +31,7 @@ const ChatPage = () => {
   };
 
   const handleSendMsg = (msg: string) => {
-    if (user && selectedUser) {
+    if (msg && user && selectedUser) {
       socketSendMsg({ msg, sender: user, reciever: selectedUser });
     }
   };
@@ -34,7 +42,7 @@ const ChatPage = () => {
       <Drawer>
         <>
           <Header hasBack user={selectedUser} handleUserClick={handleUserHeaderClick} />
-          <ChatList chat={chat} />
+          <ChatList chat={getChat(chats, selectedUser)} user={user} />
           <ChatInput handleSendMsg={handleSendMsg} />
         </>
       </Drawer>

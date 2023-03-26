@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { socketMsg } from "../../types/common.types";
 import { chatSliceState } from "./chat.types";
 
 const initialState: chatSliceState = {
@@ -13,8 +14,10 @@ export const chatSlice = createSlice({
     setSelectedUser: (state, action) => {
       state.selectedUser = action.payload;
     },
-    setChats: (state, action) => {
-      state.chats = action.payload;
+    setChats: (state, { payload }) => {
+      console.log(payload);
+
+      state.chats = payload;
     },
   },
 });

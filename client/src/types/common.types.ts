@@ -11,11 +11,20 @@ export type userSocketState = {
   email: string;
 };
 
+export type userMsgState = {
+  _id: string;
+  username: string;
+  email: string;
+};
+
 export type chatState = {
-  user: userState;
+  user: userMsgState;
   msg: string;
 };
-export type allChatsState = chatState[];
+export type allChatsState = {
+  user: userMsgState;
+  msgs: chatState[];
+};
 
 export type socketMsg = {
   msg: string;

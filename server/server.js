@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
 io.on(SOCKET.CONNECTION, (socket) => {
   // console.log(io.of("/").adapter);
   //send to a user that is joined
-  socket.emit(SOCKET.MESSAGE, "Welcome to Let's talk!");
+  // socket.emit(SOCKET.MESSAGE, "Welcome to Let's talk!");
 
   //listen for statuses ONLINE
   socket.on(SOCKET.STATUS_CLIENT_ONLINE, (userData) => {
