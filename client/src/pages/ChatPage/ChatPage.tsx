@@ -39,7 +39,7 @@ const ChatPage = () => {
   if (!selectedUser) return <Navigate to={ROUTE_PATHS.AUTH} />;
   return (
     <div className="">
-      <Drawer>
+      <Drawer socket={socket}>
         <>
           <Header hasBack user={selectedUser} handleUserClick={handleUserHeaderClick} />
           <ChatList chat={getChat(chats, selectedUser)} user={user} />

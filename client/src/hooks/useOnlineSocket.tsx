@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 import { SOCKET } from "../data/constants";
@@ -6,13 +6,20 @@ import { RootState } from "../store";
 import { userSocketState } from "../types/common.types";
 
 const useOnlineSocket = ({ socket }: { socket: Socket | null }) => {
+  const socketConnectRef = useRef(false);
+
   const { user } = useSelector((state: RootState) => state.auth);
 
   const [isConnected, setIsConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<userSocketState[]>([]);
 
   useEffect(() => {
-    if (socket && user && !isConnected) {
+    //used ref to eliminate 2 times calling of useeffect
+    if (socketConnectRef.current) return;
+    socketConnectRef.current = true;
+
+    //socket start
+    if (socket && user) {
       //socket connect
       socket.on(SOCKET.CONNECT, () => {
         console.log("SOCKET ONLINE CONNECTED");
@@ -36,13 +43,6 @@ const useOnlineSocket = ({ socket }: { socket: Socket | null }) => {
         setIsConnected(false);
       });
     }
-    return () => {
-      if (socket) {
-        console.log("SOCKET OFF");
-        socket.off(SOCKET.CONNECT);
-        socket.off(SOCKET.DISCONNECT);
-      }
-    };
   }, []);
 
   return { socket, onlineUsers, isConnected };

@@ -54,7 +54,7 @@ const UsersPage = () => {
   if (!user) return <Navigate to={ROUTE_PATHS.AUTH} />;
   return (
     <div className="">
-      <Drawer>
+      <Drawer socket={socket}>
         <>
           <Header hasBack={false} user={user} handleUserClick={handleUserHeaderClick} />
           <div className="p-2 z-1 z-0 h-[calc(100vh-6rem)] overflow-y-scroll overflow-x-hidden py-2">{content}</div>

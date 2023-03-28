@@ -14,7 +14,13 @@ const ChatInput = ({ handleSendMsg }: ChatInputProps) => {
         value={msg}
         onChange={(e) => setMsg(e.target.value)}
       />
-      <button className="btn btn-circle btn-primary" onClick={() => handleSendMsg(msg)}>
+      <button
+        className="btn btn-circle btn-primary"
+        onClick={() => {
+          handleSendMsg(msg);
+          setMsg("");
+        }}
+      >
         <MdSend size={24} />
       </button>
     </div>

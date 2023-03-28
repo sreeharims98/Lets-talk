@@ -3,10 +3,13 @@ import { AppDispatch } from "../../store";
 import { logout } from "../../store/auth/authSlice";
 import { DrawerProps } from "./Drawer.types";
 
-const Drawer = ({ children }: DrawerProps) => {
+const Drawer = ({ socket, children }: DrawerProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleLogout = async () => {
+    if (socket) {
+      socket.disconnect();
+    }
     dispatch(logout());
   };
 
