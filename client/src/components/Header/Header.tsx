@@ -3,7 +3,7 @@ import { HeaderProps } from "./Header.types";
 import { MdArrowBack, MdOutlineMoreVert } from "react-icons/md";
 import UserList from "../UserList/UserList";
 
-const Header = ({ hasBack, user, handleUserClick }: HeaderProps) => {
+const Header = ({ hasBack, user, handleUserClick, isOnline }: HeaderProps) => {
   const navigate = useNavigate();
 
   return (
@@ -14,7 +14,7 @@ const Header = ({ hasBack, user, handleUserClick }: HeaderProps) => {
             <MdArrowBack size={24} />
           </button>
         )}
-        <UserList user={user} handleClick={handleUserClick} isHoverable={false} />
+        <UserList user={user} handleClick={handleUserClick} isHoverable={false} isOnline={isOnline} />
       </div>
       <div>
         <label htmlFor="my-drawer-menu" className="drawer-button btn btn-circle btn-ghost">

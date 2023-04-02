@@ -11,14 +11,13 @@ import { userState } from "../../types/common.types";
 import { useEffect } from "react";
 import { getAllUsers } from "../../store/users/usersSlice";
 import Spinner from "../../components/Spinner/Spinner";
-import { useSocket } from "../../context/socketContext";
-import useOnlineSocket from "../../hooks/useOnlineSocket";
+import useChatSocket from "../../hooks/useChatSocket";
 
 const UsersPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { socket } = useSocket();
-  const { onlineUsers } = useOnlineSocket({ socket });
+  const {} = useChatSocket();
+
   const { user } = useSelector((state: RootState) => state.auth);
   const { users, loading } = useSelector((state: RootState) => state.users);
 
@@ -31,13 +30,6 @@ const UsersPage = () => {
     // navigate(-1);
   };
 
-  const checkUserOnline = (user: userState) => {
-    if (user && onlineUsers.length && onlineUsers.find((o) => o._id === user._id)) {
-      return true;
-    }
-    return false;
-  };
-
   useEffect(() => {
     dispatch(getAllUsers(""));
   }, []);
@@ -46,7 +38,7 @@ const UsersPage = () => {
   if (loading) {
     content = <Spinner isFull={false} />;
   } else if (users.length) {
-    content = users.map((u) => <UserList key={u.email} user={u} handleClick={handleUserClick} isOnline={checkUserOnline(u)} />);
+    content = users.map((u) => <UserList key={u.email} user={u} handleClick={handleUserClick} isOnline={false} />);
   } else {
     content = <Message text="No users found" />;
   }
@@ -54,9 +46,9 @@ const UsersPage = () => {
   if (!user) return <Navigate to={ROUTE_PATHS.AUTH} />;
   return (
     <div className="">
-      <Drawer socket={socket}>
+      <Drawer>
         <>
-          <Header hasBack={false} user={user} handleUserClick={handleUserHeaderClick} />
+          <Header hasBack={false} user={user} handleUserClick={handleUserHeaderClick} isOnline={false} />
           <div className="p-2 z-1 z-0 h-[calc(100vh-6rem)] overflow-y-scroll overflow-x-hidden py-2">{content}</div>
         </>
       </Drawer>

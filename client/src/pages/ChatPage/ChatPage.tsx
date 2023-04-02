@@ -20,8 +20,8 @@ const getChat = (chats: allChatsState[], selectedUser: userState | null) => {
 
 const ChatPage = () => {
   const navigate = useNavigate();
-  const { socket } = useSocket();
-  const { socketSendMsg } = useChatSocket({ socket });
+  // const { socket } = useSocket();
+  const { socketSendMsg, isOnline } = useChatSocket();
 
   const { selectedUser, chats } = useSelector((state: RootState) => state.chat);
   const { user } = useSelector((state: RootState) => state.auth);
@@ -39,9 +39,9 @@ const ChatPage = () => {
   if (!selectedUser) return <Navigate to={ROUTE_PATHS.AUTH} />;
   return (
     <div className="">
-      <Drawer socket={socket}>
+      <Drawer>
         <>
-          <Header hasBack user={selectedUser} handleUserClick={handleUserHeaderClick} />
+          <Header hasBack user={selectedUser} handleUserClick={handleUserHeaderClick} isOnline={isOnline} />
           <ChatList chat={getChat(chats, selectedUser)} user={user} />
           <ChatInput handleSendMsg={handleSendMsg} />
         </>

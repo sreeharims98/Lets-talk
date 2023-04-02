@@ -4,4 +4,5 @@ export type HeaderProps = {
   hasBack: boolean;
   user: userState;
   handleUserClick: () => void;
+  isOnline: boolean;
 };
