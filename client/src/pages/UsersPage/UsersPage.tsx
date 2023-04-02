@@ -11,12 +11,12 @@ import { userState } from "../../types/common.types";
 import { useEffect } from "react";
 import { getAllUsers } from "../../store/users/usersSlice";
 import Spinner from "../../components/Spinner/Spinner";
-import useChatSocket from "../../hooks/useChatSocket";
+import useSocket from "../../hooks/useSocket";
 
 const UsersPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const {} = useChatSocket();
+  const {} = useSocket();
 
   const { user } = useSelector((state: RootState) => state.auth);
   const { users, loading } = useSelector((state: RootState) => state.users);

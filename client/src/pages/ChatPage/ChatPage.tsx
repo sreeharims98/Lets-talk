@@ -7,8 +7,7 @@ import Header from "../../components/Header/Header";
 import { RootState } from "../../store";
 import { Navigate } from "react-router-dom";
 import { ROUTE_PATHS } from "../../data/constants";
-import useChatSocket from "../../hooks/useChatSocket";
-import { useSocket } from "../../context/socketContext";
+import useSocket from "../../hooks/useSocket";
 import { allChatsState, userState } from "../../types/common.types";
 
 const getChat = (chats: allChatsState[], selectedUser: userState | null) => {
@@ -20,8 +19,7 @@ const getChat = (chats: allChatsState[], selectedUser: userState | null) => {
 
 const ChatPage = () => {
   const navigate = useNavigate();
-  // const { socket } = useSocket();
-  const { socketSendMsg, isOnline } = useChatSocket();
+  const { socketSendMsg, isOnline } = useSocket();
 
   const { selectedUser, chats } = useSelector((state: RootState) => state.chat);
   const { user } = useSelector((state: RootState) => state.auth);

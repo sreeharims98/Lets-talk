@@ -4,8 +4,8 @@
 
 - Start project in production : `npm run prod`
 
-- Build project in development : `npm build:dev`
+- Build project in development : `npm run build:dev`
 
-- Build project in production : `npm build:prod`
+- Build project in production : `npm run build:prod`
 
 - Add android gradle folder : `npx cap add android`
