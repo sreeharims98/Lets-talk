@@ -7,7 +7,7 @@
     "dev": "env-cmd -f env/.env.dev vite",
     "prod": "env-cmd -f env/.env vite",
     "build:dev": "env-cmd -f env/.env.dev tsc && vite build",
-    "build:prod": "env-cmd -f env/.env tsc && vite build",
+    "build:prod": "tsc && vite build",
     "android": "npx cap add android",
     "preview": "vite preview"
   },
