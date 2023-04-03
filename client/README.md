@@ -1,7 +1,11 @@
 # Let's talk
 
-- Start project : `yarn start`
+- Start project in development : `npm run dev`
 
-- Build project : `yarn build`
+- Start project in production : `npm run prod`
+
+- Build project in development : `npm run build:dev`
+
+- Build project in production : `npm run build:prod`
 
 - Add android gradle folder : `npx cap add android`

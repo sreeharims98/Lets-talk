@@ -1,7 +1,8 @@
+import { userState } from "../../types/common.types";
+
 export type HeaderProps = {
   hasBack: boolean;
-  name: string;
-  email: string;
-  avatar: string;
+  user: userState;
   handleUserClick: () => void;
+  isOnline: boolean;
 };

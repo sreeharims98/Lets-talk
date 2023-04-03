@@ -1,9 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authSlice from "./features/auth/authSlice";
+import authSlice from "./auth/authSlice";
+import chatSlice from "./chat/chatSlice";
+import commonSlice from "./common/commonSlice";
+import usersSlice from "./users/usersSlice";
 
 export const store = configureStore({
   reducer: {
+    common: commonSlice,
     auth: authSlice,
+    users: usersSlice,
+    chat: chatSlice,
   },
 });
 
