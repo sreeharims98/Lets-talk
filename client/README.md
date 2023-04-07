@@ -6,6 +6,10 @@
 
 - Build project in development : `npm run build:dev`
 
-- Build project in production : `npm run build:prod`
+- To make an android app : goto env > .env and copy that to config (Because android app cannot read .env files it has to be hard coded)
 
-- Add android gradle folder : `npx cap add android`
+- Build project in production : `npm run build:android:prod`
+
+- Rename dist folder to build
+
+- Add android gradle folder : `npm run build:android:gradle`
