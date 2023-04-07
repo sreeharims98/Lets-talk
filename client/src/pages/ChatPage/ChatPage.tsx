@@ -1,11 +1,10 @@
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import ChatInput from "../../components/ChatInput/ChatInput";
 import ChatList from "../../components/ChatList/ChatList";
 import Drawer from "../../components/Drawer/Drawer";
 import Header from "../../components/Header/Header";
 import { RootState } from "../../store";
-import { Navigate } from "react-router-dom";
 import { ROUTE_PATHS } from "../../data/constants";
 import useSocket from "../../hooks/useSocket";
 import { allChatsState, userState } from "../../types/common.types";
@@ -18,14 +17,15 @@ const getChat = (chats: allChatsState[], selectedUser: userState | null) => {
 };
 
 const ChatPage = () => {
-  const navigate = useNavigate();
+  const history = useHistory();
+
   const { socketSendMsg, isOnline } = useSocket();
 
   const { selectedUser, chats } = useSelector((state: RootState) => state.chat);
   const { user } = useSelector((state: RootState) => state.auth);
 
   const handleUserHeaderClick = () => {
-    navigate(-1);
+    history.goBack();
   };
 
   const handleSendMsg = (msg: string) => {
@@ -34,7 +34,7 @@ const ChatPage = () => {
     }
   };
 
-  if (!selectedUser) return <Navigate to={ROUTE_PATHS.AUTH} />;
+  if (!selectedUser) return <Redirect to={ROUTE_PATHS.AUTH} />;
   return (
     <div className="">
       <Drawer>

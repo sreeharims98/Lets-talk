@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
 import Drawer from "../../components/Drawer/Drawer";
 import Header from "../../components/Header/Header";
 import UserList from "../../components/UserList/UserList";
@@ -12,9 +11,11 @@ import { useEffect } from "react";
 import { getAllUsers } from "../../store/users/usersSlice";
 import Spinner from "../../components/Spinner/Spinner";
 import useSocket from "../../hooks/useSocket";
+import { Redirect, useHistory } from "react-router-dom";
 
 const UsersPage = () => {
-  const navigate = useNavigate();
+  const history = useHistory();
+
   const dispatch = useDispatch<AppDispatch>();
   const {} = useSocket();
 
@@ -23,7 +24,7 @@ const UsersPage = () => {
 
   const handleUserClick = (user: userState) => {
     dispatch(setSelectedUser(user));
-    navigate(ROUTE_PATHS.CHAT);
+    history.push(ROUTE_PATHS.CHAT);
   };
 
   const handleUserHeaderClick = () => {
@@ -43,7 +44,7 @@ const UsersPage = () => {
     content = <Message text="No users found" />;
   }
 
-  if (!user) return <Navigate to={ROUTE_PATHS.AUTH} />;
+  if (!user) return <Redirect to={ROUTE_PATHS.AUTH} />;
   return (
     <div className="">
       <Drawer>
